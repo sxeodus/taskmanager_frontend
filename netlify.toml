@@ -1,0 +1,12 @@
+# Build settings for Netlify
+[build]
+  # This command will be run to build your site
+  command = "npm run build"
+  # The folder that contains the built site
+  publish = "dist"
+
+# Redirect rules for a single-page application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
