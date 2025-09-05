@@ -1,0 +1,21 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/rtcoibbi/public_html/tutorial002/server"
+PassengerBaseURI "/"
+PassengerNodejs "/home/rtcoibbi/nodevenv/public_html/tutorial002/server/14/bin/node"
+PassengerAppType node
+PassengerStartupFile dist/index.js
+RewriteEngine On
+RewriteRule ^api/(.*)$ http://127.0.0.1:%{SERVER_PORT}/api/$1 [P,L]
+RewriteRule ^socket.io/(.*)$ ws://127.0.0.1:%{SERVER_PORT}/socket.io/$1 [P,L]
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+SetEnv DB_HOST localhost
+SetEnv DB_NAME rtcoibbi_taskapp
+SetEnv DB_PASSWORD Og!tZS1x@oOE
+SetEnv DB_USER rtcoibbi_taskuser
+SetEnv JWT_SECRET eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywiaWF0IjoxNzU2ODQwNDQwLCJleHAiOjE3NTY4NDQwNDB9.B7QASwN4PtjOQHxh7vneOGBnmm8PJO3yZzUkNEKCqp8
+SetEnv NODE_ENV production
+SetEnv CORS_ORIGIN https://whitetaskmanager.netlify.app
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

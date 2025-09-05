@@ -16,16 +16,23 @@ const PORT = process.env.PORT || 5001;
 const httpServer = http.createServer(app);
 
 // Use environment variable for CORS origin in production
-const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:5173";
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173").split(',');
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: corsOrigin,
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"]
-  }
-});
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "PATCH", "DELETE", "PUT"]
+};
 
-app.use(cors({ origin: corsOrigin }));
+const io = new Server(httpServer, { cors: corsOptions });
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // In-memory map to track user's socket connections
@@ -99,9 +106,10 @@ cron.schedule('*/5 * * * *', async () => {
   }
 });
 
-
+// Health check endpoint for cPanel and other services
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello from the Task Management API!');
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.status(200).send('<h2>Task Management API is running</h2>');
 });
 
 // Mount Routers
